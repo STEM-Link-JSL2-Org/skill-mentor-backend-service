@@ -53,8 +53,10 @@ public class SecurityConfig {
                                 "/swagger-resources/**"
                         ).permitAll()
                         // Public read access to mentors from home page
-                        .requestMatchers(HttpMethod.GET, "/api/v1/mentors", "/api/v1/mentors/*").permitAll()
-                        .anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/mentors", "/api/v1/mentors/*").permitAll()
+                        // Admin-only endpoints
+                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
             .addFilterBefore(clerkAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .httpBasic(AbstractHttpConfigurer::disable);
